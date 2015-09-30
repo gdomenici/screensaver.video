@@ -92,16 +92,23 @@ def dir_exists(dirpath):
     return xbmcvfs.exists(directoryPath)
 
 
-# Get the contents of the directory
-def list_dir(dirpath):
+# Get the contents of the directory, optionally recursing down
+def list_dir(dirpath, recursive):
     # There is a problem with the afp protocol that means if a directory not ending
     # in a / is given, an error happens as it just appends the filename to the end
     # without actually checking there is a directory end character
     #    http://forum.xbmc.org/showthread.php?tid=192255&pid=1681373#pid1681373
     if dirpath.startswith('afp://') and (not dirpath.endswith('/')):
         dirpath = os_path_join(dirpath, '/')
-    return xbmcvfs.listdir(dirpath)
-
+    dirs, files = xbmcvfs.listdir(dirpath)
+    dirs = [os_path_join(dirpath, oneDir) for oneDir in dirs]
+    files = [os_path_join(dirpath, oneFile) for oneFile in files]
+    if recursive:
+        for oneDir in dirs:
+            subDirs, subFiles = list_dir(oneDir, recursive)
+            dirs.extend(subDirs)
+            files.extend(subFiles)
+    return dirs, files
 
 ##############################
 # Stores Various Settings
@@ -227,12 +234,17 @@ class Settings():
     @staticmethod
     def setScreensaverFolder(screensaverFolder):
         __addon__.setSetting("useFolder", "true")
+        __addon__.setSetting("recurseFolders", "false")
         __addon__.setSetting("screensaverFolder", screensaverFolder)
         __addon__.setSetting("screensaverFile", "")
 
     @staticmethod
     def isFolderSelection():
         return __addon__.getSetting("useFolder") == "true"
+
+    @staticmethod
+    def isFolderSelectionRecursive():
+        return __addon__.getSetting("recurseFolders") == "true"
 
     @staticmethod
     def setVideoSelectionPredefined():

@@ -1,3 +1,6 @@
+v1.2.2
+- Add "Also Look In Subfolders" option for "Use All Files In A Folder"
+
 v1.2.1
 - Add option to shutdown after the screensaver is automatically stopped
 

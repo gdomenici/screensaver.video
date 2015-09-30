@@ -96,6 +96,10 @@ msgctxt "#32031"
 msgid "Schedule Settings File"
 msgstr "Schedule Settings File"
 
+msgctxt "#32032"
+msgid "Also Look In Subfolders"
+msgstr "Also Look In Subfolders"
+
 msgctxt "#32050"
 msgid "Set/Download Preset Video File"
 msgstr "Set/Download Preset Video File"

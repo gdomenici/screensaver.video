@@ -219,14 +219,14 @@ class ScreensaverWindow(xbmcgui.WindowXMLDialog):
             # Check if we are dealing with a Folder of videos
             if videosFolder != "" and dir_exists(videosFolder):
                 self.currentScheduleItem = -1
-                dirs, files = list_dir(videosFolder)
+                recursive = Settings.isFolderSelectionRecursive()
+                dirs, files = list_dir(videosFolder, recursive)
                 # Now shuffle the playlist to ensure that if there are more
                 #  than one video a different one starts each time
                 random.shuffle(files)
                 for vidFile in files:
-                    fullPath = os_path_join(videosFolder, vidFile)
-                    log("Screensaver video in directory is: %s" % fullPath)
-                    playlist.add(fullPath)
+                    log("Screensaver video in directory is: %s" % vidFile)
+                    playlist.add(vidFile)
         else:
             # Must be dealing with a single file
             videoFile = Settings.getScreensaverVideo()
